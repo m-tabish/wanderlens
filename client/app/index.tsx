@@ -7,7 +7,7 @@ export default function RootLayout() {
 	useEffect(() => {
 		setTimeout(() => {
 			setIsLoading(false);
-		}, 1000);
+		}, 200);
 	}, []);
 	return (
 		<View className="flex-1 justify-center items-center bg-white">
@@ -29,7 +29,7 @@ export default function RootLayout() {
 					</Text>
 				</>
 			) : (
-				<Redirect href="/tabs/home"></Redirect>
+				<Redirect href="/tabs/createNewTrip"></Redirect>
 			)}
 		</View>
 	);

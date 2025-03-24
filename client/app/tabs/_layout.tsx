@@ -9,7 +9,23 @@ import {
 import React from "react";
 const TabsLayout = () => {
 	return (
-		<Tabs screenOptions={{ headerShown: false }}>
+		<Tabs
+			screenOptions={{
+				headerShown: false,
+				tabBarShowLabel: false,
+				tabBarStyle: {
+					paddingBottom: 0,
+					height: 55,
+					position: "absolute",
+				},
+				tabBarItemStyle: {
+					paddingBottom: 0,
+					paddingTop: 8,
+				},
+				tabBarLabelStyle: {
+					display: "none",
+				},
+			}}>
 			<Tabs.Screen
 				name="home"
 				options={{
@@ -17,37 +33,8 @@ const TabsLayout = () => {
 					headerShown: false,
 					tabBarIcon: ({ focused }) => (
 						<House
-							className="flex flex-1 w-full h-full"
 							size={30}
-							color={focused ? "#7e7e7e" : "#000000"}
-						/>
-					),
-				}}
-			/>
-			<Tabs.Screen
-				name="trips"
-				options={{
-					title: "Trips",
-					headerShown: false,
-					tabBarIcon: ({ focused }) => (
-						<ClipboardList
-							className="flex flex-1 w-full h-full"
-							size={30}
-							color={focused ? "#90d6ff" : "#000000"}
-						/>
-					),
-				}}
-			/>
-			<Tabs.Screen
-				name="createNewTrip"
-				options={{
-					title: "CreateANewTrip",
-					headerShown: false,
-					tabBarIcon: ({ focused }) => (
-						<MapPlus
-							className="flex flex-1 w-full h-full"
-							size={30}
-							color={focused ? "#90d6ff" : "#000000"}
+							color={focused ? "#000000" : "#bebebe"}
 						/>
 					),
 				}}
@@ -59,13 +46,39 @@ const TabsLayout = () => {
 					headerShown: false,
 					tabBarIcon: ({ focused }) => (
 						<Search
-							className="flex flex-1 w-full h-full"
 							size={30}
-							color={focused ? "#90d6ff" : "#000000"}
+							color={focused ? "#000000" : "#bebebe"}
 						/>
 					),
 				}}
 			/>
+			<Tabs.Screen
+				name="createNewTrip"
+				options={{
+					title: "CreateANewTrip",
+					headerShown: false,
+					tabBarIcon: ({ focused }) => (
+						<MapPlus
+							size={30}
+							color={focused ? "#000000" : "#bebebe"}
+						/>
+					),
+				}}
+			/>
+			<Tabs.Screen
+				name="trips"
+				options={{
+					title: "Trips",
+					headerShown: false,
+					tabBarIcon: ({ focused }) => (
+						<ClipboardList
+							size={30}
+							color={focused ? "#000000" : "#bebebe"}
+						/>
+					),
+				}}
+			/>
+
 			<Tabs.Screen
 				name="settings"
 				options={{
@@ -73,9 +86,8 @@ const TabsLayout = () => {
 					headerShown: false,
 					tabBarIcon: ({ focused }) => (
 						<Settings
-							className="flex flex-1 w-full h-full"
 							size={30}
-							color={focused ? "#90d6ff" : "#000000"}
+							color={focused ? "#000000" : "#bebebe"}
 						/>
 					),
 				}}

@@ -36,6 +36,9 @@
 		],
 		"experiments": {
 			"typedRoutes": true
+		},
+		"extra": {
+			"EXPO_PUBLIC_GEOMAP": "process.env.EXPO_PUBLIC_GEOMAP"
 		}
 	}
 }
