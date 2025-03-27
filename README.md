@@ -1,138 +1,50 @@
-Here’s a **detailed GitHub README** for *Wander Lens*, formatted to showcase its AI/AR/VR features, tech stack, and setup instructions:
+# Welcome to your Expo app 👋
 
----
+This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
 
-# 🌍 **Wander Lens**  
-**AI-Powered Travel Companion with AR/VR Exploration**  
-*"Travel Smarter, Explore Deeper, Share Seamlessly"*  
+## Get started
 
-[![License](https://img.shields.io/badge/license-MIT-green)](LICENSE)  
+1. Install dependencies
 
----
+   ```bash
+   npm install
+   ```
 
-## 🚀 **Overview**  
-Wander Lens redefines travel planning and exploration with **AI-driven recommendations**, **AR navigation**, **gamified treasure hunts**, and **VR destination previews**. It’s designed for modern travelers seeking personalized, immersive, and safe adventures.  
+2. Start the app
 
-**Key Features**:  
-- 🤖 **AI Itinerary Generator**: Tailored plans based on budget, interests, and group size.  
-- 🔍 **AR Navigation**: Real-time directions and sign translation.  
-- 🗺 **Treasure Hunts**: Solve AR puzzles to unlock rewards.  
-- 🛡 **Safety Tools**: Live location sharing and emergency SOS.  
-- 📸 **AI Photo Classifier**: Auto-organize trip memories.  
-- 🌐 **VR Previews**: Explore hotels/destinations virtually.  
+   ```bash
+    npx expo start
+   ```
 
----
+In the output, you'll find options to open the app in a
 
-## 🛠 **Tech Stack**  
-| **Component**       | **Tools/Frameworks**                                                                 |  
-|----------------------|-------------------------------------------------------------------------------------|  
-| **AI/ML**            | TensorFlow, PyTorch, NLP, OpenCV                                                    |  
-| **AR/VR**            | ARKit/ARCore, Unity3D, Vuforia, Oculus SDK, Blender                                 |  
-| **Backend**          | Firebase (Auth, Realtime DB), Node.js, AWS S3                                       |  
-| **Frontend**         | React Native, Expo, Three.js                                                        |  
-| **APIs**             | Google Maps API, OpenAI/GPT, Currency Converter API                                 |  
+- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
+- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
+- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
+- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
 
----
+You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
 
-## 📱 **Installation**  
-### **Prerequisites**  
-- Node.js 18+  
-- Xcode (iOS) / Android Studio (Android)   
+## Get a fresh project
 
-### **Steps**  
-1. **Clone the Repo**  
-   ```bash  
-   git clone https://github.com/your-username/wander-lens.git  
-   cd wander-lens  
-   ```  
+When you're ready, run:
 
-2. **Install Dependencies**  
-   ```bash  
-   npm install  
-   # For AR/VR modules:  
-   cd ar-vr-module && npm install  
-   ```  
+```bash
+npm run reset-project
+```
 
-3. **Environment Setup**  
-   - Create a `.env` file:  
-     ```env  
-     GOOGLE_MAPS_API_KEY=your_key  
-     OPENAI_API_KEY=your_key  
-     FIREBASE_CONFIG=your_config  
-     ```  
+This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
 
-4. **Run the App**  
-   - **iOS**:  
-     ```bash  
-     npx react-native run-ios  
-     ```  
-   - **Android**:  
-     ```bash  
-     npx react-native run-android  
-     ```  
+## Learn more
 
----
+To learn more about developing your project with Expo, look at the following resources:
 
-## 🎮 **Features in Action**  
-### **1. AI-Powered Planning**  
-- **Input Preferences**:  
-  ```javascript  
-  const trip = generateItinerary({  
-    destination: "Tokyo",  
-    budget: "$2000",  
-    interests: ["food", "history"],  
-  });  
-  ```  
-- **Output**: A day-wise plan optimized for costs and time.  
- 
-### **3. Treasure Hunt**  
-![Treasure Hunt](wireframes/treasure-hunt.png)  
-*Solve clues at checkpoints to earn rewards*  
+- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
+- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
 
-### **4. VR Destination Preview**  
-![VR Preview](wireframes/vr-preview.png)  
-"Walk" through a Bali villa before booking  
+## Join the community
 
----
+Join our community of developers creating universal apps.
 
-## 🤝 **Contributing**  
-1. Fork the repo.  
-2. Create your feature branch:  
-   ```bash  
-   git checkout -b feature/new-ar-filter  
-   ```  
-3. Commit changes:  
-   ```bash  
-   git commit -m "Add AR landmark recognition"  
-   ```  
-4. Push and open a PR!  
-
-**Code of Conduct**: Follow the [Contributor Covenant](CODE_OF_CONDUCT.md).  
-
----
-
-## 📜 **License**  
-MIT License. See [LICENSE](LICENSE) for details.  
-
----
-
-## 📅 **Roadmap**  
-- **Phase 1**: Launch MVP (AI planning, AR navigation).  
-- **Phase 2**: Add multiplayer AR treasure hunts.  
-- **Phase 3**: Integrate metaverse travel meetups.  
-
----
-
-## 📞 **Contact**  
-- **Team**:  
-  - AI/ML Lead: [Your LinkedIn](https://linkedin.com/)  
-  - AR/VR Lead: [Co-Founder’s Portfolio](https://portfolio.com/)  
-- **Email**: contact@wanderlens.com  
-
----
-
-**Let’s build the future of travel together!** 🌍✨  
-
----
-
-**Note**: Replace placeholder images in `wireframes/` with actual screenshots.
+- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
+- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
