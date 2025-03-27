@@ -1,70 +1,90 @@
-// app/createnewtrip/index.js
 import { Input, InputField } from "@/components/ui/input";
 import { Ionicons } from "@expo/vector-icons";
 import { router } from "expo-router";
-import { ArrowBigLeft, ArrowBigRight } from "lucide-react-native";
-import React, { useState } from "react";
-import { Text, TouchableOpacity, View } from "react-native";
+import { ArrowBigLeft, ArrowBigRight, Check } from "lucide-react-native";
+import React, { useEffect, useState } from "react";
+import {
+	KeyboardAvoidingView,
+	Text,
+	TouchableOpacity,
+	View,
+} from "react-native";
 import { Calendar } from "react-native-calendars";
+import { questions } from "../services/data";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function CreateNewTrip() {
-	const [answers, setAnswers] = useState({});
+	const [answers, setAnswers] = useState<any>({});
 	const [currentSlide, setCurrentSlide] = useState(0);
-	const [inputValue, setInputValue] = useState<any>("");
-	console.log(inputValue + "\n");
-	console.log(inputValue);
+	const [inputValue, setInputValue] = useState<string>("");
+	// Flag to prevent re-submitting if an answer is updated after submission.
+	const [submitted, setSubmitted] = useState(false);
 
-	const questions = [
-		{
-			id: "1",
-			question: "What is your destination?",
-			placeholder: "e.g., Paris, Tokyo, Bali",
-			key: "destination",
-		},
-		{
-			id: "2",
-			question: "Trip starts on?",
-
-			key: "start_day",
-		},
-		{
-			id: "3",
-			question: "Trip ends on?",
-			key: "end_day",
-		},
-		{
-			id: "4",
-			question: "What's your budget?",
-			placeholder: "e.g., $1000",
-			key: "budget",
-		},
-		{
-			id: "5",
-			question: "Who are you traveling with?",
-			placeholder: "e.g., Family, Friends, Solo",
-			key: "travellers",
-		},
-		{
-			id: "6",
-			question: "What type of activities interest you?",
-			placeholder: "e.g., Adventure, Food, Culture",
-			key: "interests",
-		},
-	];
-
-	// Move to the next slide
+	// Move to the next slide and update answers
 	const goToNextSlide = () => {
+		setAnswers((prevAnswers: any) => ({
+			...prevAnswers,
+			[questions[currentSlide].key]: inputValue,
+		}));
+
+		setInputValue(""); // Reset input for the next question
+
 		if (currentSlide < questions.length - 1) {
+			// Move to the next question
 			setCurrentSlide(currentSlide + 1);
 		} else {
-			// Submit the trip details
-			console.log("Trip Details:", answers);
-			// router.push("./trips"); // Navigate to a summary page
+			// All questions answered; submission will be triggered by the useEffect below.
+			console.log("Final answers:", {
+				...answers,
+				[questions[currentSlide].key]: inputValue,
+			});
+		}
+	};
+
+	// Move to previous slide and update answers
+	const goToPreviousSlide = () => {
+		if (currentSlide > 0) {
+			setAnswers((prevAnswers: any) => ({
+				...prevAnswers,
+				[questions[currentSlide].key]: inputValue,
+			}));
+
+			setTimeout(() => {
+				setCurrentSlide(currentSlide - 1);
+				setInputValue(answers[questions[currentSlide - 1]?.key] || "");
+			}, 100);
+		}
+	};
+
+	// Use effect to trigger the submission when all answers are filled
+	useEffect(() => {
+		// Check if we've collected answers for all questions and haven't submitted yet.
+		if (Object.keys(answers).length === questions.length && !submitted) {
+			submitTripDetails();
+		}
+	}, [answers]);
+
+	const submitTripDetails = async () => {
+		try {
+			const response = await fetch("http://127.0.0.1:5000/create_trip", {
+				method: "POST",
+				body: JSON.stringify(answers), // ensure answers are stringified
+				headers: {
+					"Content-Type": "application/json",
+				},
+			});
+			const data = await response.json();
+			console.log("Trip successfully created:", data);
+			setSubmitted(true);
+			// Navigate after a successful submission
+			router.push("./trips");
+		} catch (error) {
+			console.error("ERROR IN CREATING TRIP::", error);
 		}
 	};
 
 	return (
-		<View className="flex-1 bg-white">
+		<SafeAreaView className="flex-1 bg-white">
 			{/* Header */}
 			<View className="flex-row items-center justify-between px-4 py-4">
 				<TouchableOpacity
@@ -93,32 +113,28 @@ export default function CreateNewTrip() {
 			</View>
 
 			{/* Questions / Carousel */}
-			<View className="  mx-auto  justify-center mt-52 flex-col items-center">
-				<Text className="text-3xl font-bold ">
+			<View className="mx-auto justify-center mt-52 flex-col items-center">
+				<Text className="text-3xl font-bold px-5">
 					{questions[currentSlide].question}
 				</Text>
 				{!questions[currentSlide].key.includes("day") ? (
 					<Input
-						className="w-1/2 mt-20"
-						variant="underlined"
-						isFocused={true}>
+						className="w-1/2 mt-20 mb-10"
+						variant="underlined">
 						<InputField
 							placeholder={questions[currentSlide].placeholder}
-							className=" bg-white w-full text-center text-black rounded-lg"
+							className="bg-white w-1/2 px-2 text-center text-black rounded-lg"
 							value={inputValue}
-							onChangeText={(value: string) => {
-								setInputValue(value);
-							}}></InputField>
+							onChangeText={setInputValue}
+						/>
 					</Input>
 				) : (
 					<View className="flex-col items-center">
 						<Calendar
-							onDayPress={(day: any) => {
-								setInputValue(day.dateString);
-							}}
+							onDayPress={(day: any) => setInputValue(day.dateString)}
 							style={{
-								height: 100,
-								w: "100%",
+								height: 150,
+								width: "100%",
 							}}
 							theme={{
 								backgroundColor: "#ffffff",
@@ -128,7 +144,7 @@ export default function CreateNewTrip() {
 								selectedDayTextColor: "#ffffff",
 								todayTextColor: "#00adf5",
 								dayTextColor: "#2d4150",
-								textDisabledColor: "#dd99ee",
+								textDisabledColor: "#d9e1e8",
 							}}
 						/>
 					</View>
@@ -136,23 +152,13 @@ export default function CreateNewTrip() {
 			</View>
 
 			{/* Navigation Buttons */}
-			<View className="flex-row justify-between px-6 top-96">
+			<KeyboardAvoidingView className="flex-row justify-between px-6 top-64">
 				<TouchableOpacity
-					onPress={() => {
-						// Ensure answers get updated before navigating
-						setAnswers((prevAnswers) => ({
-							...prevAnswers,
-							[questions[currentSlide].key]: inputValue,
-						}));
-
-						// Delay slide change to allow state to update
-						setTimeout(() => {
-							setCurrentSlide(Math.max(currentSlide - 1, 0));
-							setInputValue("");
-						}, 100);
-					}}
-					className="p-6  rounded-full border">
-					{" "}
+					onPress={goToPreviousSlide}
+					disabled={currentSlide === 0}
+					className={`p-6 rounded-full border ${
+						currentSlide === 0 ? "opacity-50" : ""
+					}`}>
 					<ArrowBigLeft
 						size={30}
 						color={"#000000"}
@@ -160,31 +166,21 @@ export default function CreateNewTrip() {
 				</TouchableOpacity>
 
 				<TouchableOpacity
-					onPress={() => {
-						// Update answers before moving to next slide
-						setAnswers((prevAnswers) => ({
-							...prevAnswers,
-							[questions[currentSlide].key]: inputValue,
-						}));
-						setInputValue("");
-
-						// Delay slide change to ensure state updates
-						setTimeout(() => {
-							if (currentSlide < questions.length - 1) {
-								setCurrentSlide(currentSlide + 1);
-							} else {
-								console.log("Trip Details:", answers);
-								// router.push("./trips"); // Uncomment if navigation needed
-							}
-						}, 100);
-					}}
-					className="p-6  rounded-full bg-green-400">
-					<ArrowBigRight
-						size={30}
-						color={"#000000"}
-					/>
+					onPress={goToNextSlide}
+					className="p-6 rounded-full bg-green-400">
+					{currentSlide === questions.length ? (
+						<Check
+							size={30}
+							color={"#000000"}
+						/>
+					) : (
+						<ArrowBigRight
+							size={30}
+							color={"#000000"}
+						/>
+					)}
 				</TouchableOpacity>
-			</View>
-		</View>
+			</KeyboardAvoidingView>
+		</SafeAreaView>
 	);
 }

@@ -1,49 +1,11 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { View, Text, FlatList, Image, TouchableOpacity } from "react-native";
 import { Link } from "expo-router";
+import { Ionicons } from "@expo/vector-icons";
+import { tripsData } from "../services/data";
 
-const tripsData = [
-	{
-		id: "1",
-		title: "Beach Getaway",
-		location: "Malibu, CA",
-		date: "2025-04-10",
-		image:
-			"https://static.toiimg.com/thumb/msid-93316368,width-748,height-499,resizemode=4,imgsize-236120/.jpg",
-		description:
-			"Enjoy a relaxing time at the beautiful Malibu beach with great food and activities.",
-	},
-	{
-		id: "2",
-		title: "Mountain Adventure",
-		location: "Kiyoto, JP",
-		date: "2025-05-15",
-		image:
-			"https://cdn.britannica.com/96/196396-050-13758154/Chureito-Pagoda-Arakura-Sengen-Shrine-Mount-Fuji.jpg",
-		description:
-			"Experience the breathtaking mountain scenery and thrilling hiking trails in Aspen.",
-	},
-	{
-		id: "3",
-		title: "City Exploration",
-		location: "New York, NY",
-		date: "2025-06-20",
-		image:
-			"https://career-advice.jobs.ac.uk/wp-content/uploads/Norway3-1170x630.jpg.optimal.jpg",
-		description:
-			"Discover the iconic landmarks, museums, and vibrant culture of New York City.",
-	},
-	{
-		id: "4",
-		title: "Desert Safari",
-		location: "Dubai, UAE",
-		date: "2025-07-05",
-		image:
-			"https://dynamic-media-cdn.tripadvisor.com/media/photo-o/04/06/8a/3c/arabian-nights-village.jpg?w=900&h=500&s=1",
-		description:
-			"Take an adventurous ride through the golden sands of Dubai with camel rides and dune bashing.",
-	},
-];
+import { SafeAreaView } from "react-native-safe-area-context";
+import { router } from "expo-router";
 
 type Trip = {
 	id: string;
@@ -69,10 +31,38 @@ const TripCard: React.FC<Trip> = ({ id, title, location, date, image }) => (
 		</TouchableOpacity>
 	</Link>
 );
-
 const Trips = () => {
+	const getTripDetails = async () => {
+		try {
+			const response = await fetch("http://localhost:5000/create_trip", {
+				method: "GET",
+			});
+
+			const data = await response.json();
+
+			console.log("getTripDetails Ran:: ", data);
+			return data;
+		} catch (error) {
+			console.error(error);
+		}
+	};
+
+
+	
+	useEffect(() => {
+		getTripDetails();
+	}, []);
 	return (
-		<View className="flex-1 bg-white p-4">
+		<SafeAreaView className="flex-1 bg-white p-4">
+			<TouchableOpacity
+				onPress={() => router.back()}
+				className="p-2 ">
+				<Ionicons
+					name="arrow-back"
+					size={24}
+					color="#333"
+				/>
+			</TouchableOpacity>
 			<Text className="text-black font-bold text-3xl text-center mb-4">
 				Trips
 			</Text>
@@ -82,7 +72,7 @@ const Trips = () => {
 				renderItem={({ item }) => <TripCard {...item} />}
 				showsVerticalScrollIndicator={false}
 			/>
-		</View>
+		</SafeAreaView>
 	);
 };
 

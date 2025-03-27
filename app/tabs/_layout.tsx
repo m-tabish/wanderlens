@@ -16,7 +16,7 @@ const TabsLayout = () => {
 				tabBarStyle: {
 					paddingBottom: 0,
 					height: 55,
-					position: "absolute",
+					position: "fixed",
 				},
 				tabBarItemStyle: {
 					paddingBottom: 0,
