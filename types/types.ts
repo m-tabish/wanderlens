@@ -6,14 +6,16 @@ type day = {
 	year: number;
 };
 
-type Trip = {
+type TripsType = {
+	id: string;
+	name: string;
 	destination: string;
-	trip_start: day;
-	trip_end: day;
-	trip_type: string;
-	budget: number;
+	start_day: string;
+	end_day: string;
+	trip_type?: string;
+	budget?: number;
 	travellers?: number;
 	interests?: string[];
-	// year: ;
 };
-export { day, Trip };
+
+export { day, TripsType };

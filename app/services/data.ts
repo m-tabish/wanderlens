@@ -204,7 +204,7 @@ export const questions = [
 	{
 		id: uuid.v4(),
 		question: "Let us start by giving a name to your trip.",
-		placeholder: "e.g., Vacation, Friends, Hackathon",
+		placeholder: "e.g., Vacation, College Trip, Hackathon",
 		key: "name",
 	},
 	{
@@ -225,8 +225,8 @@ export const questions = [
 	},
 	{
 		id: uuid.v4(),
-		question: "What's your budget?",
-		placeholder: "e.g., $1000",
+		question: "What's your budget per person?",
+		placeholder: "e.g., Rs.1000",
 		key: "budget",
 	},
 	{
