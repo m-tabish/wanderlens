@@ -50,7 +50,7 @@ const Trips = () => {
 
 	useEffect(() => {
 		getTripDetails();
-	}, [tripsData]);
+	}, [setTripsData]);
 
 	if (tripsData.length === 0) {
 		return <>No trips Created.</>;
@@ -79,4 +79,5 @@ const Trips = () => {
 	);
 };
 
+ 
 export default Trips;

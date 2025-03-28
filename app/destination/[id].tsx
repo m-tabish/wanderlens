@@ -21,7 +21,7 @@ export default function DestinationScreen() {
 
 			{/* Back Button */}
 			<TouchableOpacity
-				onPress={() => router.back()}
+				onPress={() => router.push("/tabs/home")}
 				className="absolute top-4 left-4 p-2 bg-white rounded-full shadow-md z-10">
 				<Ionicons
 					name="arrow-back"
