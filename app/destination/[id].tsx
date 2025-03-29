@@ -1,10 +1,11 @@
 import { useLocalSearchParams } from "expo-router";
 import { Text, TouchableOpacity, ScrollView, View } from "react-native";
-import { router } from "expo-router";
+import { useRouter } from "expo-router";
 import { Image } from "@/components/ui/image";
 import { Ionicons } from "@expo/vector-icons";
 
 export default function DestinationScreen() {
+	const router = useRouter();
 	const { id, item } = useLocalSearchParams();
 
 	// Parse the passed item from params
@@ -59,7 +60,10 @@ export default function DestinationScreen() {
 					Explore with AR/VR
 				</Text>
 				<View className="flex-row justify-between mt-4">
-					<TouchableOpacity className="items-center">
+					<TouchableOpacity className="items-center"
+					onPress={() =>
+						router.push({pathname:"/pages/ARview",params:{destination :JSON.stringify(parsedItem.coordinates)}})}
+					>
 						<Ionicons
 							name="navigate"
 							size={32}
@@ -67,13 +71,22 @@ export default function DestinationScreen() {
 						/>
 						<Text className="mt-2 text-sm text-gray-600">AR Navigation</Text>
 					</TouchableOpacity>
-					<TouchableOpacity className="items-center">
+					<TouchableOpacity className="items-center"
+					onPress={() => 
+						router.push({
+						  pathname: "/Components/Maps",
+						  params: { destination: JSON.stringify(parsedItem.coordinates) }
+						})
+					  }
+					  
+					>
+						
 						<Ionicons
-							name="glasses"
+							name="map"
 							size={32}
 							color="#3BB77E"
 						/>
-						<Text className="mt-2 text-sm text-gray-600">VR Preview</Text>
+						<Text className="mt-2 text-sm text-gray-600">Famous Places</Text>
 					</TouchableOpacity>
 					<TouchableOpacity className="items-center">
 						<Ionicons
