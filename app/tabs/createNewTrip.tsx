@@ -5,6 +5,7 @@ import { ArrowBigLeft, ArrowBigRight, Check } from "lucide-react-native";
 import React, { useEffect, useState } from "react";
 import {
 	KeyboardAvoidingView,
+	Platform,
 	Text,
 	TouchableOpacity,
 	View,
@@ -17,7 +18,6 @@ export default function CreateNewTrip() {
 	const [answers, setAnswers] = useState<any>({});
 	const [currentSlide, setCurrentSlide] = useState(0);
 	const [inputValue, setInputValue] = useState<string>("");
-	// Flag to prevent re-submitting if an answer is updated after submission.
 	const [submitted, setSubmitted] = useState(false);
 
 	// Move to the next slide and update answers
@@ -30,10 +30,8 @@ export default function CreateNewTrip() {
 		setInputValue(""); // Reset input for the next question
 
 		if (currentSlide < questions.length - 1) {
-			// Move to the next question
 			setCurrentSlide(currentSlide + 1);
 		} else {
-			// All questions answered; submission will be triggered by the useEffect below.
 			console.log("Final answers:", {
 				...answers,
 				[questions[currentSlide].key]: inputValue,
@@ -58,7 +56,6 @@ export default function CreateNewTrip() {
 
 	// Use effect to trigger the submission when all answers are filled
 	useEffect(() => {
-		// Check if we've collected answers for all questions and haven't submitted yet.
 		if (Object.keys(answers).length === questions.length && !submitted) {
 			submitTripDetails();
 		}
@@ -68,7 +65,7 @@ export default function CreateNewTrip() {
 		try {
 			const response = await fetch("http://127.0.0.1:5000/create_trip", {
 				method: "POST",
-				body: JSON.stringify(answers), // ensure answers are stringified
+				body: JSON.stringify(answers),
 				headers: {
 					"Content-Type": "application/json",
 				},
@@ -76,7 +73,6 @@ export default function CreateNewTrip() {
 			const data = await response.json();
 			console.log("Trip successfully created:", data);
 			setSubmitted(true);
-			// Navigate after a successful submission
 			router.push("./trips");
 		} catch (error) {
 			console.error("ERROR IN CREATING TRIP::", error);
@@ -84,58 +80,61 @@ export default function CreateNewTrip() {
 	};
 
 	return (
-		<SafeAreaView className="flex-1 bg-white">
+		<SafeAreaView style={{ flex: 1, backgroundColor: "#fff" }}>
 			{/* Header */}
-			<View className="flex-row items-center justify-between px-4 py-4">
-				<TouchableOpacity
-					onPress={() => router.back()}
-					className="p-2">
-					<Ionicons
-						name="arrow-back"
-						size={24}
-						color="#333"
-					/>
+			<View style={{ flexDirection: "row", alignItems: "center", justifyContent: "space-between", paddingHorizontal: 16, paddingVertical: 16 }}>
+				<TouchableOpacity onPress={() => router.back()} style={{ padding: 8 }}>
+					<Ionicons name="arrow-back" size={24} color="#333" />
 				</TouchableOpacity>
-				<Text className="text-lg font-bold text-gray-800">Create New Trip</Text>
-				<View className="w-8" /> {/* Empty space for alignment */}
+				<Text style={{ fontSize: 18, fontWeight: "bold", color: "#333" }}>
+					Create New Trip
+				</Text>
+				<View style={{ width: 32 }} />
 			</View>
 
 			{/* Progress Indicator */}
-			<View className="flex-row justify-center mt-4">
+			<View style={{ flexDirection: "row", justifyContent: "center", marginTop: 16 }}>
 				{questions.map((_, index) => (
 					<View
 						key={index}
-						className={`w-2 h-2 rounded-full mx-1 ${
-							currentSlide === index ? "bg-green-500" : "bg-gray-300"
-						}`}
+						style={{
+							width: 8,
+							height: 8,
+							borderRadius: 4,
+							marginHorizontal: 4,
+							backgroundColor: currentSlide === index ? "#4CAF50" : "#ccc",
+							transform: [{ scale: currentSlide === index ? 1.25 : 1 }],
+						}}
 					/>
 				))}
 			</View>
 
 			{/* Questions / Carousel */}
-			<View className="mx-auto justify-center mt-52 flex-col items-center">
-				<Text className="text-3xl font-bold px-5">
+			<View style={{ alignItems: "center", marginTop: 100, paddingHorizontal: 16 }}>
+				<Text style={{ fontSize: 28, fontWeight: "bold", textAlign: "center", marginBottom: 24 }}>
 					{questions[currentSlide].question}
 				</Text>
 				{!questions[currentSlide].key.includes("day") ? (
-					<Input
-						className="w-1/2 mt-20 mb-10"
-						variant="underlined">
+					<Input style={{ width: "100%", marginVertical: 24 }} variant="underlined">
 						<InputField
 							placeholder={questions[currentSlide].placeholder}
-							className="bg-white w-1/2 px-2 text-center text-black rounded-lg"
+							style={{
+								backgroundColor: "#fff",
+								paddingHorizontal: 16,
+								paddingVertical: 12,
+								textAlign: "center",
+								color: "#000",
+								borderRadius: 8,
+							}}
 							value={inputValue}
 							onChangeText={setInputValue}
 						/>
 					</Input>
 				) : (
-					<View className="flex-col items-center">
+					<View style={{ alignItems: "center", width: "100%" }}>
 						<Calendar
 							onDayPress={(day: any) => setInputValue(day.dateString)}
-							style={{
-								height: 150,
-								width: "100%",
-							}}
+							style={{ borderRadius: 10, marginVertical: 16, width: "100%" }}
 							theme={{
 								backgroundColor: "#ffffff",
 								calendarBackground: "#ffffff",
@@ -152,32 +151,50 @@ export default function CreateNewTrip() {
 			</View>
 
 			{/* Navigation Buttons */}
-			<KeyboardAvoidingView className="flex-row justify-between px-6 top-64">
+			<KeyboardAvoidingView
+				behavior={Platform.OS === "ios" ? "padding" : "height"}
+				style={{
+					flexDirection: "row",
+					justifyContent: "space-between",
+					paddingHorizontal: 20,
+					marginTop: 32,
+					paddingBottom: 20,
+				}}
+			>
 				<TouchableOpacity
 					onPress={goToPreviousSlide}
 					disabled={currentSlide === 0}
-					className={`p-6 rounded-full border ${
-						currentSlide === 0 ? "opacity-50" : ""
-					}`}>
-					<ArrowBigLeft
-						size={30}
-						color={"#000000"}
-					/>
+					style={{
+						padding: 16,
+						borderRadius: 50,
+						borderWidth: 1,
+						borderColor: currentSlide === 0 ? "#ccc" : "#000",
+						opacity: currentSlide === 0 ? 0.5 : 1,
+						alignItems: "center",
+						justifyContent: "center",
+						flex: 1,
+						marginRight: 10,
+					}}
+				>
+					<ArrowBigLeft size={30} color={currentSlide === 0 ? "#ccc" : "#000"} />
 				</TouchableOpacity>
 
 				<TouchableOpacity
 					onPress={goToNextSlide}
-					className="p-6 rounded-full bg-green-400">
-					{currentSlide === questions.length ? (
-						<Check
-							size={30}
-							color={"#000000"}
-						/>
+					style={{
+						padding: 16,
+						borderRadius: 50,
+						backgroundColor: "#4CAF50",
+						alignItems: "center",
+						justifyContent: "center",
+						flex: 1,
+						marginLeft: 10,
+					}}
+				>
+					{currentSlide === questions.length - 1 ? (
+						<Check size={30} color="#fff" />
 					) : (
-						<ArrowBigRight
-							size={30}
-							color={"#000000"}
-						/>
+						<ArrowBigRight size={30} color="#fff" />
 					)}
 				</TouchableOpacity>
 			</KeyboardAvoidingView>
