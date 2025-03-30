@@ -18,6 +18,8 @@ import {
 import { places } from "../services/data";
 import { router } from "expo-router";
 
+import AIPlaces from "../Components/AIPlace";
+
 import { SafeAreaView } from "react-native-safe-area-context";
 const categories = [
   { id: "1", name: "Beaches", icon: "ios-sunny" },
@@ -140,6 +142,11 @@ export default function Home() {
           </View>
         </View>
 		{/* AI Suggestion */}
+		<View className="mb-8">
+
+			<AIPlaces/>
+
+			</View>
 
       </ScrollView>
     </SafeAreaView>
