@@ -140,14 +140,15 @@ export default function Home() {
               ))}
             </View>
           </View>
+          <TouchableOpacity
+            className="bg-blue-500 py-3 px-6 rounded-lg shadow-md"
+            onPress={() => router.push("../Components/AIPlace")}
+          >
+            <Text className="text-white text-lg font-semibold text-center">
+              Plan My Trip with AI
+            </Text>
+          </TouchableOpacity>
         </View>
-		{/* AI Suggestion */}
-		<View className="mb-8">
-
-			<AIPlaces/>
-
-			</View>
-
       </ScrollView>
     </SafeAreaView>
   );
