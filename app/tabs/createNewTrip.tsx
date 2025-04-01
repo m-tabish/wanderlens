@@ -63,7 +63,7 @@ export default function CreateNewTrip() {
 
 	const submitTripDetails = async () => {
 		try {
-			const response = await fetch("http://127.0.0.1:5000/create_trip", {
+			const response = await fetch("https://wanderlens-server.onrender.com/create_trip", {
 				method: "POST",
 				body: JSON.stringify(answers),
 				headers: {

@@ -1,83 +1,107 @@
-import { Ionicons } from "@expo/vector-icons";
-import { Link } from "expo-router";
 import React, { useEffect, useState } from "react";
-import { FlatList, Text, TouchableOpacity } from "react-native";
-
-import { router } from "expo-router";
+import { FlatList, Text, TouchableOpacity, View, ActivityIndicator } from "react-native";
+import { Ionicons } from "@expo/vector-icons";
+import { Link, router } from "expo-router";
 import { SafeAreaView } from "react-native-safe-area-context";
-
 import { TripsType } from "../../types/types";
 
 const TripCard: React.FC<TripsType> = ({
-	name,
-	destination,
-	start_day,
-	end_day,
-	trip_type,
-	budget,
-	travellers,
-	interests,
-	id,
+  name,
+  destination,
+  start_day,
+  end_day,
+  trip_type,
+  budget,
+  travellers,
+  interests,
+  id,
 }) => (
-	<Link
-		href={`/customertrips/${id}` as const}
-		asChild>
-		<TouchableOpacity className="bg-white rounded-xl shadow-lg p-4 m-2 w-full items-center">
-			<Text className="text-black font-bold text-lg mt-2">{name}</Text>
-			<Text className="text-gray-700 text-sm">{destination}</Text>
-			<Text className="text-gray-500 text-sm">{start_day}</Text>
-			<Text className="text-gray-500 text-sm">{end_day}</Text>
-		</TouchableOpacity>
-	</Link>
+  <Link href={`/customertrips/${id}`} asChild>
+    <TouchableOpacity
+      style={{
+        backgroundColor: "#fff",
+        borderRadius: 12,
+        padding: 16,
+        marginVertical: 8,
+        marginHorizontal: 4,
+        shadowColor: "#000",
+        shadowOpacity: 0.1,
+        shadowRadius: 4,
+        elevation: 3,
+        width: "100%",
+      }}
+    >
+      <Text style={{ color: "#000", fontWeight: "bold", fontSize: 18, marginBottom: 4 }}>
+        {name}
+      </Text>
+      <Text style={{ color: "#555", fontSize: 14, marginBottom: 2 }}>
+        Destination: {destination}
+      </Text>
+      <Text style={{ color: "#777", fontSize: 12 }}>
+        {start_day} - {end_day}
+      </Text>
+    </TouchableOpacity>
+  </Link>
 );
+
 const Trips = () => {
-	const [tripsData, setTripsData] = useState<TripsType[]>([]);
-	const getTripDetails = async () => {
-		try {
-			const response = await fetch("http://localhost:5000/create_trip", {
-				method: "GET",
-			});
+  const [tripsData, setTripsData] = useState<TripsType[]>([]);
+  const [loading, setLoading] = useState<boolean>(false);
 
-			const data = await response.json();
+  const getTripDetails = async () => {
+    setLoading(true);
+    try {
+      const response = await fetch("https://wanderlens-server.onrender.com/create_trip", {
+        method: "GET",
+      });
+      const data = await response.json();
+      console.log("getTripDetails Ran:: ", data);
+      setTripsData(data);
+    } catch (error) {
+      console.error("Error fetching trips:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
-			console.log("getTripDetails Ran:: ", data);
-			setTripsData(data);
-			return data;
-		} catch (error) {
-			console.error(error);
-		}
-	};
+  useEffect(() => {
+    getTripDetails();
+  }, []);
 
-	useEffect(() => {
-		getTripDetails();
-	}, [setTripsData]);
+  if (loading) {
+    return (
+      <SafeAreaView style={{ flex: 1, backgroundColor: "#fff", justifyContent: "center", alignItems: "center" }}>
+        <ActivityIndicator size="large" color="#0077FF" />
+        <Text style={{ marginTop: 10, fontSize: 16, color: "#555" }}>Loading Trips...</Text>
+      </SafeAreaView>
+    );
+  }
 
-	if (tripsData.length === 0) {
-		return <>No trips Created.</>;
-	}
-	return (
-		<SafeAreaView className="flex-1 bg-white p-4">
-			<TouchableOpacity
-				onPress={() => router.back()}
-				className="p-2 ">
-				<Ionicons
-					name="arrow-back"
-					size={24}
-					color="#333"
-				/>
-			</TouchableOpacity>
-			<Text className="text-black font-bold text-3xl text-center mb-4">
-				Trips
-			</Text>
-			<FlatList
-				data={tripsData}
-				keyExtractor={(item) => item.id}
-				renderItem={({ item }) => <TripCard {...item} />}
-				showsVerticalScrollIndicator={false}
-			/>
-		</SafeAreaView>
-	);
+  if (tripsData.length === 0) {
+    return (
+      <SafeAreaView style={{ flex: 1, backgroundColor: "#fff", justifyContent: "center", alignItems: "center" }}>
+        <Text style={{ fontSize: 18, color: "#555" }}>No trips created.</Text>
+      </SafeAreaView>
+    );
+  }
+
+  return (
+    <SafeAreaView style={{ flex: 1, backgroundColor: "#fff", padding: 16 }}>
+      <TouchableOpacity onPress={() => router.back()} style={{ padding: 8 }}>
+        <Ionicons name="arrow-back" size={24} color="#333" />
+      </TouchableOpacity>
+      <Text style={{ fontSize: 32, fontWeight: "bold", textAlign: "center", marginVertical: 16, color: "#333" }}>
+        Trips
+      </Text>
+      <FlatList
+        data={tripsData}
+        keyExtractor={(item) => item.id}
+        renderItem={({ item }) => <TripCard {...item} />}
+        showsVerticalScrollIndicator={false}
+        contentContainerStyle={{ paddingBottom: 20 }}
+      />
+    </SafeAreaView>
+  );
 };
 
- 
 export default Trips;
